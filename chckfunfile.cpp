@@ -129,7 +129,7 @@ bool checkline(string finalline){
 				return false;
 			}
 			else if(previousStr){
-				if(previous=="exp"||previous=="log"){
+				if(previous=="exp"||previous=="log"||previous=="sin"||previous=="log10"){
 					//previousM=true
 					previous.clear();
 				}
@@ -237,10 +237,10 @@ bool checkfile(){
 	return true;
 }
 bool createCfile(){
-	ofstream finalfile("obj.c");
+	ofstream finalfile("obj.cpp");
 	ifstream datafile("data.txt");
 	string variables;
-	finalfile<<"extern \"c\" long double obj(long double *arr);"<<endl<<"long double obj(long double *arr){"<<endl<<"long double ";
+	finalfile<<"extern \"C\" long double obj(long double *arr);"<<endl<<"#include \"cmath\""<<endl<<"long double obj(long double *arr){"<<endl<<"long double ";
 	//cout<<lines.size();
 	for(int i=0;i<lines.size();i++){
 		finalfile<<lines[i].variable;
