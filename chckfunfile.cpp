@@ -21,7 +21,7 @@ Line newLine(string temp,string temp1){
 	return temp2;
 }
 bool checkline(string finalline){
-	bool previousStr=false,previousDigit=false,previousOp=false,previousBrO=false,previousBrC=false,previousM=false,previouseq=false;
+	bool previousStr=false,previousDigit=false,previousOp=false,previousBrO=false,previousBrC=false,previousM=false,previouseq=false,previousMinus=false;
 	string previous,variable;
 	stack<char> bracket;
 	int k;
@@ -58,14 +58,17 @@ bool checkline(string finalline){
 			else if(isdigit(finalline[i])){
 				previous.push_back(finalline[i]);
 			}
+			previousMinus=false;
 			//previousStr.append(finalline[i]);
 		}
 		else if(finalline[i]=='/'||finalline[i]=='*'||finalline[i]=='+'||finalline[i]=='-'){
-			if(previousOp==true){
+			if(previousOp&&!previouseq&&finalline[i]!='-'){
 				cout<<"Error at line "<<linenum<<endl;
 				return false;
 			}
-			
+			if(finalline[i]=='-'){
+				previousMinus=true;
+			}
 			if(previousStr){
 				for(k=0;k<var.size();k++){
 					if(var[k].variable==previous){
