@@ -1,20 +1,9 @@
-#include "dlfcn.h"
-#include "stdio.h"
-#include "fstream"
-#include "iostream"
-#include "cstdlib"
-#include "ctime"
-#include <iomanip>
-#include "stdio.h"
-using namespace std;
-typedef struct{
-	long double *position,*pBest,*vel;
-
-}Particles;
+#include "optimizer.hpp"
 long double *gBest;
 void *handle,*function;
 char *error;
 long double (*obj)(long double *);
+Result finalResult;
 bool sharedObject(){
 	handle=dlopen("./obj.so",RTLD_NOW);
 	if(!handle){
@@ -67,7 +56,7 @@ long double *getGbest(Particles *particles,int particlecount,int maxorminF){
 	}
 	return maxormin;
 }
-long double * psoBeg(int iteration,int particlecount,int paramCount,float alpha1,float alpha2,float w,float constriction,int maxormin){// if maxormin=0 then minimization
+void psoBeg(int iteration,int particlecount,int paramCount,float alpha1,float alpha2,float w,float constriction,int maxormin){// if maxormin=0 then minimization
 	Particles particles[particlecount];
 	int it=0;
 	for(int i=0;i<particlecount;i++){
@@ -91,13 +80,22 @@ long double * psoBeg(int iteration,int particlecount,int paramCount,float alpha1
 		it++;
 		//printf("%llf\n%llf\n\n",(*obj)(gBest),gBest[0]);
 	}while(it<=iteration);
-	cout<<(*obj)(gBest)<<endl;
-	return gBest;
+	//cout<<(*obj)(gBest)<<endl<<gBest[0]<<" "<<gBest[1]<<endl;
+	//return gBest;
+	finalResult.result=(*obj)(gBest);
+	finalResult.variables=gBest;
+	finalResult.paramcount=paramCount;
 }
 
-int main(){
+Result optimize(){
 	srand(time(NULL));
 	int paramcount=getParamcount();
-	sharedObject();
-	long double *result=psoBeg(300,15,paramcount,1,1.2,.5,.8,0);
+	finalResult.succes=true;
+	if(!sharedObject()){
+		cout<<"problem loading objective file"<<endl;
+		finalResult.succes=false;
+		return finalResult;
+	}
+	psoBeg(300,20,paramcount,2.1,2.6,.56,.76,0);
+	return finalResult;
 }

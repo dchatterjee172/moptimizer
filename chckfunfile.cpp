@@ -88,6 +88,12 @@ bool checkline(string finalline){
 			previous.clear();
 			continue;
 		}
+		else if(finalline[i]=='.'){
+			if(!previousDigit){
+				cout<<"Error at line "<<linenum<<endl;
+				return false;
+			}	
+		}
 		else if(finalline[i]=='='){
 			if(previousOp||previousBrO||previousBrC||previousDigit){
 				cout<<"Error at line "<<linenum<<endl;
@@ -102,6 +108,13 @@ bool checkline(string finalline){
 			previousStr=false;
 			previouseq=true;
 		}
+		/*else if(finalline[i]=='^'){
+			if(!previousBrC){
+				cout<<"Error at line "<<linenum<<endl;
+				return false;
+			}
+			
+		}*/
 		else if(i==finalline.length()-1&&finalline[i]==';'){
 			if(previousOp||previousBrO){
 				cout<<"Error at line "<<linenum<<endl;
@@ -129,7 +142,7 @@ bool checkline(string finalline){
 				return false;
 			}
 			else if(previousStr){
-				if(previous=="exp"||previous=="log"||previous=="sin"||previous=="log10"){
+				if(previous=="exp"||previous=="log"||previous=="sin"||previous=="log10"||previous=="sin"||previous=="cos"||previous=="fabs"){
 					//previousM=true
 					previous.clear();
 				}
@@ -217,7 +230,7 @@ bool checkfile(){
 		if(!var[i].haveValue){
 			cout<<var[i].variable<<" is not defined. Is it a parameter? press y is yes: ";
 			cin>>choice;
-			if(choice=="yes"){
+			if(choice=="y"){
 				datafile<<var[i].variable<<endl;
 				paramcount++;
 			}
@@ -240,6 +253,7 @@ bool createCfile(){
 	ofstream finalfile("obj.cpp");
 	ifstream datafile("data.txt");
 	string variables;
+	int variablecount=0;
 	finalfile<<"extern \"C\" long double obj(long double *arr);"<<endl<<"#include \"cmath\""<<endl<<"long double obj(long double *arr){"<<endl<<"long double ";
 	//cout<<lines.size();
 	for(int i=0;i<lines.size();i++){
@@ -250,15 +264,13 @@ bool createCfile(){
 	finalfile<<endl;
 	datafile>>variables;
 	while(variables!="#"&&!datafile.eof()){
-		finalfile<<"long double "<<variables<<"=arr[0];"<<endl;
+		finalfile<<"long double "<<variables<<"=arr["<<variablecount++<<"];"<<endl;
 		datafile>>variables;
 	}
 	for(int i=0;i<lines.size();i++){
 		finalfile<<lines[i].line<<endl;
 	}
-	finalfile<<"return "<<lines[lines.size()-1].variable<<';'<<endl<<'}';
+	finalfile<<"return "<<lines[lines.size()-1].variable<<";}";
+	return true;
 }
-int main(){//testing purpose
-	checkfile();
-	createCfile();
-}
+
