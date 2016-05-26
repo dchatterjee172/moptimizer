@@ -39,8 +39,13 @@ int main(){
 				cout<<"objective funtion is not loaded"<<endl;
 			}
 		}
+		else if(command=="quit"){
+			cout<<"good bye"<<endl;
+			return 0;
+		}
+		
 		else{
-			continue;
+			cout<<"sorry i can't understand you.enter \"objective\" to load objective funtion file,\"optimize\" to optimize the objective funtion,\"quit\" to exit"<<endl;
 		}
 	}
 	return 0;
