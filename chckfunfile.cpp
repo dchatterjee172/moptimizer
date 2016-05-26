@@ -200,11 +200,15 @@ bool checkline(string finalline){
 	return true;
 }
 bool checkfile(){
-	ifstream inputfile("temp.txt");
+	ifstream inputfile("OBJ.txt");
 	ofstream datafile("data.txt");
 	string line,finalline,choice;
 	int paramcount=0;
 	bool mainloopflag=true;
+	if(!inputfile.good()){
+		cout<<"objective file could not be loaded"<<endl;
+		return false;
+	}
 	while(mainloopflag){
 		//line=new string;
 		linenum++;
@@ -274,6 +278,9 @@ bool createCfile(){
 		finalfile<<lines[i].line<<endl;
 	}
 	finalfile<<"return "<<lines[lines.size()-1].variable<<";}";
+	finalfile.close();
+	var.clear();
+	lines.clear();
 	return true;
 }
 
