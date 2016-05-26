@@ -199,8 +199,9 @@ bool checkline(string finalline){
 	lines.push_back(newLine(variable,finalline));
 	return true;
 }
-bool checkfile(){
-	ifstream inputfile("OBJ.txt");
+bool checkfile(string filename){
+	const char *c=filename.c_str();
+	ifstream inputfile(c);
 	ofstream datafile("data.txt");
 	string line,finalline,choice;
 	int paramcount=0;

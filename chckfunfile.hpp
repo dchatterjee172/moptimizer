@@ -14,5 +14,5 @@ typedef struct{
 	string line;
 }Line;
 bool createCfile();
-bool checkfile();
+bool checkfile(string);
 bool checkline();

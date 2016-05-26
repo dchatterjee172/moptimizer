@@ -1,9 +1,9 @@
 #include "chckfunfile.hpp"
 #include "optimizer.hpp"
-int main(){
+int main(int argc, char *argv[]){
 	bool mainloopflag=true,fileload=false;
 	string command,variable;
-	ifstream helpfile("help.txt"),datafile("data.txt");
+	ifstream helpfile("help.txt"),datafile;
 	Result finalResult;
 	/*while(!helpfile.eof()){
 		cout<<helpfile;
@@ -12,7 +12,9 @@ int main(){
 		cout<<">>> ";
 		cin>>command;
 		if(command=="objective"){
-			if(checkfile()&&createCfile()){
+			cout<<"please enter objective funtion file name: ";
+			cin>>command;
+			if(checkfile(command)&&createCfile()){
 				fileload=true;
 				system("g++ -shared -fPIC -o obj.so obj.cpp");
 			}
@@ -27,12 +29,13 @@ int main(){
 					cout<<"There was an error"<<endl;
 				}
 				else{
+					datafile.open("data.txt");
 					for(int i=0;i<finalResult.paramcount;i++){
 						datafile>>variable;
 						cout<<variable<<"= "<<finalResult.variables[i]<<endl;
 					}
 					cout<<"Result= "<<finalResult.result<<endl;
-					datafile.seekg(0,datafile.beg);
+					datafile.close();
 				}
 			}
 			else{
