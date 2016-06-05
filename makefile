@@ -1,12 +1,16 @@
 all: main
-main: main.o funfile.o optimize.o
-	g++ main.o funfile.o optimize.o -o main -ldl
+main: main.o parser.o optimize.o eval.o
+	g++ main.o parser.o eval.o optimize.o -o main
 
 main.o: main.cpp
-	g++ -c main.cpp
-funfile.o: chckfunfile.cpp
-	g++ -c -o funfile.o chckfunfile.cpp
+	g++ -g -c main.cpp
+parser.o: parser.cpp
+	g++ -g -std=c++11 -c -o parser.o parser.cpp
+
+eval.o: evaluator.cpp
+	g++ -g -std=c++11 -c -o eval.o evaluator.cpp
+
 optimize.o: optimizer.cpp
-	g++ -c -o optimize.o optimizer.cpp
+	g++ -g -c -o optimize.o optimizer.cpp
 clean:
 	rm *o

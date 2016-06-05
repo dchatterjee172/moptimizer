@@ -1,5 +1,2 @@
-*.so
 *.o
-*.txt
-obj.cpp
 main
